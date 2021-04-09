@@ -70,18 +70,20 @@ let string_of_format (x : format) =
 
 let rec from_array suffix (arr : Ext_json_types.t array) : Spec_set.t =
   let spec = ref Spec_set.empty in
-  let has_in_source = ref false in
+  let has_in_source = ref 0 in
+  let distinct_suffixes = ref Set_string.empty in
   Ext_array.iter arr (fun x ->
       let result = from_json_single suffix x  in
-      if result.in_source then
-        (
-          if not !has_in_source then
-            has_in_source:= true
-          else
-            Bsb_exception.errorf
-              ~loc:(Ext_json.loc_of x)
-              "package-specs: we've detected two module formats that are both configured to be in-source."
-        );
+      distinct_suffixes := Set_string.add !distinct_suffixes (Ext_js_suffix.to_string result.suffix);
+      if result.in_source then begin
+        incr has_in_source;
+        let distinct_suffixes = Set_string.cardinal !distinct_suffixes in
+        if !has_in_source > distinct_suffixes then
+          Bsb_exception.errorf
+            ~loc:(Ext_json.loc_of x)
+            "package-specs: %d module formats are configured to output targets \
+             `in-source`, but only %d distinct suffix(es) were found." !has_in_source distinct_suffixes
+      end;
       spec := Spec_set.add result !spec
     );
   !spec

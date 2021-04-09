@@ -5,4 +5,5 @@
    (run %{bin:cppo} %{env:CPPO_FLAGS=} %{input-file})))
  (flags
   (:standard -w -9-50))
+ (modules_without_implementation bsb_config_types)
  (libraries bsb_helper bs_hash_stubs ext common str unix))

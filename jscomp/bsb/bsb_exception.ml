@@ -75,7 +75,7 @@ let print (fmt : Format.formatter) (x : error) =
   | Json_config (pos,s) ->
     Format.fprintf fmt "File %S, line %d:\n\
                         @{<error>Error:@} %s \n\
-                        For more details, please checkout the schema https://rescript-lang.org/docs/manual/latest/build-configuration-schema"
+                        For more details, please check out the full configuration schema at https://rescript-lang.org/docs/manual/latest/build-configuration-schema"
                         pos.pos_fname
                         pos.pos_lnum s
   | Invalid_spec s ->
