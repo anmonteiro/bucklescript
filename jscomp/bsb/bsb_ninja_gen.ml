@@ -120,7 +120,6 @@ let output_ninja_and_namespace_map
        if Map_string.mem lib k  then
          raise (Bsb_db_util.conflict_module_info k a (Map_string.find_exn lib k))
     ) ;
-  Bsb_db_encode.write_build_cache ~proj_dir:per_proj_dir bs_groups;
   let rules : Bsb_ninja_rule.builtin =
       Bsb_ninja_rule.make_custom_rules
       ~global_config

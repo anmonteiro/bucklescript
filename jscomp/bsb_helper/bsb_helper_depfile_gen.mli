@@ -25,7 +25,7 @@
 val compute_dependency_info:
   root:string ->
   cwd:string ->
-  bool ->
+  dirs:string list ->
   string  option ->
   string ->
   string -> (* empty string means no mliast *)

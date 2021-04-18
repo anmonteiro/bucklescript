@@ -29,7 +29,7 @@ let () =
   let namespace = ref None in
   let root = ref None in
   let cwd = ref None in
-  let dev_group = ref false in
+  let dirs = ref [] in
   let argv = Sys.argv in
   let l = Array.length argv in
   let current = ref 1 in
@@ -47,12 +47,14 @@ let () =
         let cwd_arg = argv.(!current) in
         cwd := Some cwd_arg;
         incr current
+      | "-I" ->
+        let dir = argv.(!current) in
+        dirs := dir :: !dirs;
+        incr current
       | "-bs-ns" ->
         let ns = argv.(!current) in
         namespace := Some ns;
         incr current
-      | "-g"  ->
-        dev_group := true
       | s ->
         prerr_endline ("unknown options: " ^ s);
         prerr_endline ("available options: -bs-ns [ns]; -g; -cwd; -root");
@@ -68,14 +70,14 @@ let () =
         ->  Bsb_helper.Bsb_helper_depfile_gen.compute_dependency_info
               ~root
               ~cwd
-              !dev_group
+              ~dirs:!dirs
               !namespace x ""
       | [y; x] (* reverse order *)
         ->
         Bsb_helper.Bsb_helper_depfile_gen.compute_dependency_info
           ~root
           ~cwd
-          !dev_group
+          ~dirs:!dirs
           !namespace x y
       | _ ->
         prerr_endline "too many arguments to bsb_helper";

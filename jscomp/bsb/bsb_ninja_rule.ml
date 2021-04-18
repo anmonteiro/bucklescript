@@ -128,6 +128,12 @@ let make_custom_rules
     Buffer.add_string buf global_config.per_proj_dir;
     Buffer.add_string buf " -cwd ";
     Buffer.add_string buf cur_dir;
+    Buffer.add_char buf ' ';
+    Buffer.add_string buf (rel_incls ?namespace:global_config.namespace global_config.g_sourcedirs_incls);
+    if is_dev && global_config.g_dev_incls <> [] then begin
+      Buffer.add_char buf ' ';
+      Buffer.add_string buf (rel_incls ?namespace:global_config.namespace global_config.g_dev_incls);
+    end;
     Buffer.add_string buf " %{ast_deps}) (run ";
     Buffer.add_string buf global_config.bsc;
     Buffer.add_string buf ns_flag;
