@@ -155,7 +155,7 @@ let rec no_side_effects (lam : Lam.t) : bool =
       | Pasrint64
       | Pint64comp _
       (* Operations on big arrays: (unsafe, #dimensions, kind, layout) *)
-
+      | Pbigarrayref _ (* TODO it may raise an exception....*)
       (* Compile time constants *)
       | Pctconst _
       (* Integer to external pointer *)
@@ -182,6 +182,9 @@ let rec no_side_effects (lam : Lam.t) : bool =
       | Pbytessetu
       | Pbytessets
       (* Operations on boxed integers (Nativeint.t, Int32.t, Int64.t) *)
+      | Pbigarrayset _
+      (* size of the nth dimension of a big array *)
+      | Pbigarraydim _ 
       | Parraysets
       (* byte swap *)
       | Parraysetu

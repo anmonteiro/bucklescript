@@ -477,7 +477,9 @@ let lam_prim ~primitive:( p : Lambda.primitive) ~args loc : Lam.t =
     | Pint32 -> prim ~primitive:(Pasrint) ~args loc
     | Pint64 -> prim ~primitive:(Pasrint64) ~args loc
     end
-  | Pbigarraydim _
+  | Pbigarraydim x -> prim ~primitive:(Pbigarraydim x) ~args loc
+  | Pbigarrayref (unsafe, dimension, kind, layout) -> prim ~primitive:(Pbigarrayref (unsafe, dimension, kind, layout)) ~args loc
+  | Pbigarrayset (unsafe, dimension, kind, layout) -> prim ~primitive:(Pbigarrayset (unsafe, dimension, kind, layout)) ~args loc
   | Pbigstring_load_16 _
   | Pbigstring_load_32 _
   | Pbigstring_load_64 _
@@ -492,9 +494,7 @@ let lam_prim ~primitive:( p : Lambda.primitive) ~args loc : Lam.t =
   | Pbytes_set_64 _
   | Pstring_load_16 _
   | Pstring_load_32 _
-  | Pstring_load_64 _
-  | Pbigarrayref _
-  | Pbigarrayset _ ->
+  | Pstring_load_64 _ ->
     Location.raise_errorf ~loc "unsupported primitive"
   | Pctconst x ->
     begin match x with

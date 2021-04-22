@@ -149,6 +149,10 @@ type t =
 
   | Pfield_computed (* Mostly used in object compilation *)
   | Psetfield_computed
+  | Pbigarrayref of bool * int * Lam_compat.bigarray_kind * Lam_compat.bigarray_layout
+  | Pbigarrayset of bool * int * Lam_compat.bigarray_kind * Lam_compat.bigarray_layout
+  (* size of the nth dimension of a big array *)
+  | Pbigarraydim of int
 
 
 
@@ -285,8 +289,11 @@ let eq_primitive_approx ( lhs : t) (rhs : t) =
   | Pvoid_run  -> rhs = Pvoid_run
   | Pfull_apply -> rhs = Pfull_apply
   | Pjs_fn_method  -> rhs = Pjs_fn_method
+  | Pbigarrayref  _ 
+  | Pbigarrayset _ 
   | Praw_js_code _
    -> false (* TOO lazy, here comparison is only approximation*)
 
   | Pfield_computed -> rhs = Pfield_computed
   | Psetfield_computed -> rhs = Psetfield_computed
+  | Pbigarraydim dim -> (match rhs with Pbigarraydim dim1 -> dim = dim1 | _ -> false )

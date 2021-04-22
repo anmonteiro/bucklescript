@@ -144,5 +144,10 @@ type t =
 
   | Pfield_computed (* Mostly used in object compilation *)
   | Psetfield_computed
+  (* Operations on big arrays: (unsafe, #dimensions, kind, layout) *)
+  | Pbigarrayref of bool * int * Lam_compat.bigarray_kind * Lam_compat.bigarray_layout
+  | Pbigarrayset of bool * int * Lam_compat.bigarray_kind * Lam_compat.bigarray_layout
+  (* size of the nth dimension of a big array *)
+  | Pbigarraydim of int
 
 val eq_primitive_approx : t -> t -> bool

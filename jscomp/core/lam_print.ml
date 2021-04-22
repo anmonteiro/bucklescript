@@ -48,6 +48,28 @@ let rec struct_const ppf (cst : Lam_constant.t) =
     fprintf ppf "@[<1>[|@[%s%a@]|]@]" f1 floats fl
 
 
+let print_bigarray name unsafe (kind : Lam_compat.bigarray_kind) ppf 
+    (layout : Lam_compat.bigarray_layout) =
+  fprintf ppf "Bigarray.%s[%s,%s]"
+    (if unsafe then "unsafe_"^ name else name)
+    (match kind with
+     | Lam_compat.Pbigarray_unknown -> "generic"
+     | Pbigarray_float32 -> "float32"
+     | Pbigarray_float64 -> "float64"
+     | Pbigarray_sint8 -> "sint8"
+     | Pbigarray_uint8 -> "uint8"
+     | Pbigarray_sint16 -> "sint16"
+     | Pbigarray_uint16 -> "uint16"
+     | Pbigarray_int32 -> "int32"
+     | Pbigarray_int64 -> "int64"
+     | Pbigarray_caml_int -> "camlint"
+     | Pbigarray_native_int -> "nativeint"
+     | Pbigarray_complex32 -> "complex32"
+     | Pbigarray_complex64 -> "complex64")
+    (match layout with
+     | Lam_compat.Pbigarray_unknown_layout -> "unknown"
+     | Pbigarray_c_layout -> "C"
+     | Pbigarray_fortran_layout -> "Fortran")
 
 let record_rep ppf (r : Lam_primitive.record_representation) =
   match r with
@@ -224,7 +246,11 @@ let primitive ppf (prim : Lam_primitive.t) = match prim with
   | Pint64comp(Cgt) -> fprintf ppf ">"
   | Pint64comp(Cle) -> fprintf ppf "<="
   | Pint64comp(Cge) -> fprintf ppf ">="
-
+  | Pbigarrayref(unsafe, _n, kind, layout) ->
+    print_bigarray "get" unsafe kind ppf layout
+  | Pbigarrayset(unsafe, _n, kind, layout) ->
+    print_bigarray "set" unsafe kind ppf layout
+  | Pbigarraydim(n) -> fprintf ppf "Bigarray.dim_%i" n
 
 
 type print_kind =

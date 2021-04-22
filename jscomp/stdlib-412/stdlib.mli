@@ -1469,10 +1469,7 @@ module Arg          = Arg
 module Array        = Array
 module ArrayLabels  = ArrayLabels
 module Atomic       = Atomic
-#if BS then
-#else
 module Bigarray     = Bigarray
-#end
 module Bool         = Bool
 module Buffer       = Buffer
 module Bytes        = Bytes

@@ -175,4 +175,34 @@ type set_field_dbg_info = Lambda.set_field_dbg_info =
   | Fld_record_extension_set of string
 
 
+type bigarray_kind = Lambda.bigarray_kind = 
+    Pbigarray_unknown
+  | Pbigarray_float32 | Pbigarray_float64
+  | Pbigarray_sint8 | Pbigarray_uint8
+  | Pbigarray_sint16 | Pbigarray_uint16
+  | Pbigarray_int32 | Pbigarray_int64
+  | Pbigarray_caml_int | Pbigarray_native_int
+  | Pbigarray_complex32 | Pbigarray_complex64
 
+
+(* let eq_bigarray_kind (p : bigarray_kind) (p1 : bigarray_kind) = 
+  match p with   
+  | Pbigarray_unknown -> p1 = Pbigarray_unknown
+  | Pbigarray_float32 -> p1 = Pbigarray_float32
+  | Pbigarray_float64 -> p1 =  Pbigarray_float64
+  | Pbigarray_sint8 -> p1 = Pbigarray_sint8
+  | Pbigarray_uint8 -> p1 = Pbigarray_uint8
+  | Pbigarray_sint16 -> p1 = Pbigarray_sint16 
+  | Pbigarray_uint16 -> p1 = Pbigarray_uint16
+  | Pbigarray_int32  -> p1 = Pbigarray_int32
+  | Pbigarray_int64 -> p1 = Pbigarray_int64
+  | Pbigarray_caml_int -> p1 = Pbigarray_caml_int
+  | Pbigarray_native_int -> p1 = Pbigarray_native_int
+  | Pbigarray_complex32  -> p1 = Pbigarray_complex32
+  | Pbigarray_complex64 -> p1 = Pbigarray_complex64 *)
+  
+  
+type bigarray_layout = Lambda.bigarray_layout = 
+    Pbigarray_unknown_layout
+  | Pbigarray_c_layout
+  | Pbigarray_fortran_layout
