@@ -138,32 +138,6 @@ let expr_mapper  (self : mapper) (e : Parsetree.expression) =
                      ])
           ->
             default_expr_mapper self {e with pexp_desc = Pexp_ifthenelse (b,t_exp,Some f_exp)}
-        | Pexp_let (Nonrecursive,
-                    [{pvb_pat =
-                        ({ ppat_desc = Ppat_record _ }
-                        |{ ppat_desc = Ppat_alias ({ppat_desc = Ppat_record _},_)}
-                        ) as p;
-                      pvb_expr;
-             pvb_attributes;
-             pvb_loc = _}], body)
-          ->
-          begin match pvb_expr.pexp_desc with
-            | Pexp_pack _ -> default_expr_mapper self e
-            | _ ->
-              default_expr_mapper self
-                {e with
-                 pexp_desc = Pexp_match(pvb_expr,
-                                        [{pc_lhs = p; pc_guard = None;
-                                          pc_rhs = body}]);
-                 pexp_attributes = e.pexp_attributes @  pvb_attributes
-                }
-          end
-         (* let [@warning "a"] {a;b} = c in body
-            The attribute is attached to value binding,
-            after the transformation value binding does not exist so we attach
-            the attribute to the whole expression, in general, when shuffuling the ast
-            it is very hard to place attributes correctly
-         *)
         | _ ->  default_expr_mapper self e
 
 
