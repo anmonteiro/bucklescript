@@ -924,7 +924,7 @@ var compilerTarget = pseudoTarget(COMPILER);
 async function runtimeNinja() {
   var ninjaCwd = "runtime";
   var ninjaOutput = "dune.gen";
-  var bsc_no_open_flags =  `${commonBsFlags} -bs-cross-module-opt -make-runtime -nopervasives -unsafe -w +50 -warn-error A`;
+  var bsc_no_open_flags =  `${commonBsFlags} -bs-cross-module-opt -make-runtime -nopervasives -unsafe -w +50-20 -warn-error A`;
   var bsc_flags = `${bsc_no_open_flags} -open Bs_stdlib_mini`;
   var templateRuntimeRules = `
 
@@ -1009,7 +1009,7 @@ async function othersNinja() {
   var externalDeps = [runtimeTarget].map(x => `(alias ../runtime/${x.name})`);
   var ninjaOutput = 'dune.gen';
   var ninjaCwd = "others";
-  var bsc_flags = `${commonBsFlags} -bs-cross-module-opt -make-runtime   -nopervasives  -unsafe  -w +50 -warn-error A  -open Bs_stdlib_mini -I ../runtime`;
+  var bsc_flags = `${commonBsFlags} -bs-cross-module-opt -make-runtime   -nopervasives  -unsafe  -w +50-9-20 -warn-error A  -open Bs_stdlib_mini -I ../runtime`;
 
   var belt_extraDeps = {
     belt_HashSet: ['belt_HashSetString', 'belt_HashSetInt'],
@@ -1158,7 +1158,7 @@ async function stdlibNinja() {
   var stdlibDir = path.join(jscompDir, stdlibVersion);
   var externalDeps = [othersTarget].map(x => `(alias ../../others/${x.name})`);
   var ninjaOutput = 'dune.gen';
-  var warnings = "-w -106 -warn-error A";
+  var warnings = "-w -9-106 -warn-error A";
   var bsc_flags = `${commonBsFlags} -bs-cross-module-opt -make-runtime ${warnings} -I ../../runtime -I ../../others `
   /**
    * @type [string,string][]
@@ -1337,7 +1337,7 @@ function baseName(x) {
 async function testNinja() {
   var ninjaOutput = "dune.gen";
   var ninjaCwd = `test`;
-  var bsc_flags = `-bs-no-version-header  -bs-cross-module-opt -make-runtime-test -bs-package-output commonjs:jscomp/test  -w -3-6-26-27-29-30-32..40-44-45-60-67-68-106+104 -warn-error A  -I ../runtime -I ../stdlib-412/stdlib_modules -nopervasives -open Stdlib__no_aliases -I ../others`
+  var bsc_flags = `-bs-no-version-header  -bs-cross-module-opt -make-runtime-test -bs-package-output commonjs:jscomp/test  -w -3-6-9-20-26-27-29-30-32..40-44-45-60-67-68-106+104 -warn-error A  -I ../runtime -I ../stdlib-412/stdlib_modules -nopervasives -open Stdlib__no_aliases -I ../others`
   var testDirFiles = fs.readdirSync(testDir, "ascii");
   var sources = testDirFiles.filter((x) => {
     return (
