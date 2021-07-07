@@ -112,6 +112,11 @@ let ends_with_then_chop s beg =
   if i >= 0 then Some (String.sub s 0 i)
   else None
 
+(*
+  TODO: check why there is it commented
+  and remove on the future if it's not in use
+*)
+
 (* let check_suffix_case = ends_with  *)
 (* let check_suffix_case_then_chop = ends_with_then_chop *)
 
@@ -227,6 +232,12 @@ let tail_from s x =
 
 let equal (x : string) y  = x = y
 
+(*
+  TODO: check why there is it commented
+  and remove on the future if it's not in use
+*)
+
+
 (* let rec index_rec s lim i c =
   if i >= lim then -1 else
   if String.unsafe_get s i = c then i
@@ -246,6 +257,11 @@ let index_count s i c count =
   if i < 0 || i >= lim || count < 1 then
     invalid_arg ("index_count: ( " ^string_of_int i ^ "," ^string_of_int count ^ ")" );
   index_rec_count s lim i c count
+
+(*
+  TODO: check why there is it commented
+  and remove on the future if it's not in use
+*)
 
 (* let index_next s i c =
   index_count s i c 1  *)
@@ -426,7 +442,6 @@ let inter3 a b c =
 
 let inter4 a b c d =
   concat_array single_space [| a; b ; c; d|]
-
 
 let parent_dir_lit = ".."
 let current_dir_lit = "."

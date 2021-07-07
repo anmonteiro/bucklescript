@@ -124,7 +124,7 @@ let emit_module_build
   let output_ast = rel_proj_dir // (impl_dir // basename output_ast) in
   let output_iast = rel_proj_dir // (intf_dir // basename output_iast) in
   let ast_deps =
-    Format.asprintf "(:ast_deps %s %s)"
+    Format.asprintf {|(:ast_deps "%s" "%s")|}
       output_ast
       (if has_intf_file then output_iast else "")
     in
@@ -237,13 +237,18 @@ let handle_files_per_dir
 
   if not (Bsb_file_groups.is_empty group) then begin
     Buffer.add_string buf "(subdir ";
+    Buffer.add_char buf '"';
     Buffer.add_string buf rel_group_dir;
+    Buffer.add_char buf '"';
     Buffer.add_char buf '\n';
     if group.subdirs <> [] then begin
       Buffer.add_string buf "(dirs :standard";
       Ext_list.iter group.subdirs (fun subdir ->
         Buffer.add_char buf ' ';
-        Buffer.add_string buf subdir);
+        Buffer.add_char buf '"';
+        Buffer.add_string buf subdir;
+        Buffer.add_char buf '"';
+      );
       Buffer.add_string buf ")\n"
     end;
     let is_dev = group.is_dev in

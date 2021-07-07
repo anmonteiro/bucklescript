@@ -28,16 +28,6 @@ let flag_concat flag xs =
 
 let (//) = Ext_path.combine
 
-
-let maybe_quote_for_dune ( s : string) =
-  if Ext_string.for_all s Ext_filename.shell_safe_character then
-    s
-  else
-    (* Dune allows `'` characters to be part of a segment, so 'foo' gets
-       interpreted as foo', or something. For dune files, we quote with `""`
-       instead. *)
-    Format.asprintf "%S" s
-
 let ppx_flags ~rel_proj_dir { Bsb_config_types.ppxlib; ppx_files } =
   let ppxlib = if ppxlib <> [] then
       (* We don't need to grab the name from `ppx.ppxlib` because it'll always
@@ -47,23 +37,23 @@ let ppx_flags ~rel_proj_dir { Bsb_config_types.ppxlib; ppx_files } =
         String.concat " " (List.concat_map (fun (x: Bsb_config_types.ppx) -> x.args) ppxlib)
       in
       let ppx_command_with_args = Format.asprintf "%s -as-ppx %s" path_to_ppx args in
-      [ maybe_quote_for_dune ppx_command_with_args ]
+      [ Ext_filename.maybe_quote_for_dune ppx_command_with_args ]
     else []
   in
   flag_concat "-ppx"
     (ppxlib @ Ext_list.map ppx_files (fun x ->
        if x.args = [] then
-         maybe_quote_for_dune x.name
+         Ext_filename.maybe_quote_for_dune x.name
        else
-        maybe_quote_for_dune
+        Ext_filename.maybe_quote_for_dune
           (Format.asprintf "%s %s" x.name (String.concat " " x.args))))
 
 let pp_flag (xs : string) =
-   "-pp " ^ maybe_quote_for_dune xs
+   "-pp " ^ Ext_filename.maybe_quote_for_dune xs
 
 let include_dirs_by dirs fn =
   String.concat Ext_string.single_space
-    (Ext_list.flat_map dirs (fun x -> ["-I"; maybe_quote_for_dune (fn x)]))
+    (Ext_list.flat_map dirs (fun x -> ["-I"; Ext_filename.maybe_quote_for_dune (fn x)]))
 
 let include_dirs dirs =
   include_dirs_by dirs Fun.id

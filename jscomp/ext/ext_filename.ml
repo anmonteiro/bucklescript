@@ -49,6 +49,14 @@ let maybe_quote ( s : string) =
     s
   else Filename.quote s
 
+let maybe_quote_for_dune ( s : string) =
+  if Ext_string.for_all s shell_safe_character then
+    s
+  else
+    (* Dune allows `'` characters to be part of a segment, so 'foo' gets
+       interpreted as foo', or something. For dune files, we quote with `""`
+       instead. *)
+    Format.asprintf "%S" s
 
 let chop_extension_maybe name =
   let rec search_dot i =

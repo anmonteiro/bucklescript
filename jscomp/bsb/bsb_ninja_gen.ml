@@ -42,7 +42,9 @@ let bsc_lib_includes (bs_dependencies : Bsb_config_types.dependencies) =
 
 let generate_ppxlib_source ~subdir ~ppx_config buf =
   Buffer.add_string buf "(subdir ";
+  Buffer.add_char buf '"';
   Buffer.add_string buf (subdir // Literals.melange_eobjs_dir);
+  Buffer.add_char buf '"';
   Bsb_ppxlib.ppxlib buf ~ppx_config;
   Buffer.add_string buf ")\n"
 
@@ -160,7 +162,9 @@ let output_ninja_and_namespace_map
         ~dir:namespace_dir ns
         bs_file_groups;
       Buffer.add_string buf "(subdir ";
+      Buffer.add_char buf '"';
       Buffer.add_string buf namespace_dir;
+      Buffer.add_char buf '"';
       Bsb_ninja_targets.output_build namespace_dir buf
         ~outputs:[ns ^ Literals.suffix_cmi]
         ~inputs:[ns ^ Literals.suffix_mlmap]
@@ -183,9 +187,13 @@ let output_ninja_and_namespace_map
       Ext_path.rel_normalized_absolute_path ~from:root_dir per_proj_dir
     in
     Buffer.add_string buf "(subdir ";
+    Buffer.add_char buf '"';
     Buffer.add_string buf subd;
+    Buffer.add_char buf '"';
     Buffer.add_string buf "(data_only_dirs ";
+    Buffer.add_char buf '"';
     Buffer.add_string buf Literals.melange_eobjs_dir;
+    Buffer.add_char buf '"';
     Buffer.add_string buf "))\n";
 
     generate_ppxlib_source ~subdir:subd ~ppx_config buf

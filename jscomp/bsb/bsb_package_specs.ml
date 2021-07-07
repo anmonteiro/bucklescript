@@ -135,11 +135,11 @@ let bs_package_output = "-bs-package-output"
 let package_flag ({ format; suffix } : spec) dir =
   Ext_string.inter2
     bs_package_output
-    (Ext_string.concat5
+    (String.make 1 '"' ^ Ext_string.concat5
        (string_of_format format)
        Ext_string.single_colon dir
       Ext_string.single_colon
-      (Ext_js_suffix.to_string suffix)
+      (Ext_js_suffix.to_string suffix) ^ String.make 1 '"'
     )
 
 (* FIXME: we should adapt it *)
@@ -227,4 +227,3 @@ let from_map ~(cwd:string) map =
     runtime;
     modules
   }
-

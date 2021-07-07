@@ -48,6 +48,10 @@ val maybe_quote:
   string ->
   string
 
+val maybe_quote_for_dune:
+  string ->
+  string
+
 val chop_extension_maybe:
   string ->
   string
