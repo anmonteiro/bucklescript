@@ -500,7 +500,7 @@ external log : float -> float =  "log" [@@bs.val] [@@bs.scope "Math"]
 external log10 : float -> float =  "log10" [@@bs.val] [@@bs.scope "Math"]
 (** Base 10 logarithm. *)
 
-external expm1 : float -> float = "caml_expm1_float" "caml_expm1" [@@unboxed] [@@noalloc]
+external expm1 : float -> float = "expm1" [@@bs.val] [@@bs.scope "Math"]
 (** [expm1 x] computes [exp x -. 1.0], giving numerically-accurate results
     even if [x] is close to [0.0].
     @since 3.12.0
@@ -538,8 +538,7 @@ external atan2 : float -> float -> float =  "atan2" [@@bs.val] [@@bs.scope "Math
     and [y] are used to determine the quadrant of the result.
     Result is in radians and is between [-pi] and [pi]. *)
 
-external hypot : float -> float -> float
-               = "caml_hypot_float" "caml_hypot" [@@unboxed] [@@noalloc]
+external hypot : float -> float -> float = "hypot" [@@bs.val] [@@bs.scope "Math"]
 (** [hypot x y] returns [sqrt(x *. x + y *. y)], that is, the length
   of the hypotenuse of a right-angled triangle with sides of length
   [x] and [y], or, equivalently, the distance of the point [(x,y)]

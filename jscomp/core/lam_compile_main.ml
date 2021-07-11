@@ -285,7 +285,7 @@ js
   )
 ;;
 
-let (//) = Filename.concat
+let (//) x y = Ext_path.concat x y
 
 let lambda_as_module
     (lambda_output : J.deps_program)

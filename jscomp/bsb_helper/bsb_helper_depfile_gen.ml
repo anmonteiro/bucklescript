@@ -28,7 +28,7 @@ module Glob = Dune_glob.V1
 
 open D.O
 
-let (//) = Ext_path.combine
+let (//) x y = Ext_path.concat x y
 
 let lib_bs = Literals.melange_eobjs_dir
 

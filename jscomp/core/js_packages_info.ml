@@ -59,7 +59,7 @@ type package_name  =
 
 
 
-let (//) = Filename.concat
+let (//) = Ext_path.concat ~force_forward_slash_on_win:()
 
 (* in runtime lib, [es6] and [es6] are treated the same wway *)
 let runtime_dir_of_module_system (ms : module_system ) =

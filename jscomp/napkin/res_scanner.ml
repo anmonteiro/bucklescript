@@ -95,9 +95,12 @@ let _printDebug ~startPos ~endPos scanner token =
   print_endline ""
 [@@live]
 
+let is_windows_or_cygwin = Sys.win32 || Sys.cygwin
+
 let next scanner =
   let nextOffset = scanner.offset + 1 in
   (match scanner.ch with
+  | '\r' when is_windows_or_cygwin -> ()
   | '\n' | '\r' ->
     scanner.lineOffset <- nextOffset;
     scanner.lnum <- scanner.lnum + 1;

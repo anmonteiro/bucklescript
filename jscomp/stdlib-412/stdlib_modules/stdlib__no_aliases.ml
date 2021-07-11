@@ -135,19 +135,22 @@ external ( /. ) : float -> float -> float = "%divfloat"
 #if BS then
 external ( ** ) : float -> float -> float = "pow" [@@bs.val] [@@bs.scope "Math"]
 external exp : float -> float = "exp" [@@bs.val][@@bs.scope "Math"]
+external expm1 : float -> float = "expm1" [@@bs.val][@@bs.scope "Math"]
 #else
 external ( ** ) : float -> float -> float = "caml_power_float" "pow"
   [@@unboxed] [@@noalloc]
 external exp : float -> float = "caml_exp_float" "exp" [@@unboxed] [@@noalloc]
-#end
+
 external expm1 : float -> float = "caml_expm1_float" "caml_expm1"
   [@@unboxed] [@@noalloc]
+#end
 
 #if BS then
 external acos : float -> float =  "acos" [@@bs.val] [@@bs.scope "Math"]
 external asin : float -> float = "asin" [@@bs.val] [@@bs.scope "Math"]
 external atan : float -> float = "atan" [@@bs.val] [@@bs.scope "Math"]
 external atan2 : float -> float -> float = "atan2" [@@bs.val] [@@bs.scope "Math"]
+external hypot : float -> float -> float = "hypot" [@@bs.val] [@@bs.scope "Math"]
 #else
 external acos : float -> float = "caml_acos_float" "acos"
   [@@unboxed] [@@noalloc]
@@ -157,9 +160,10 @@ external atan : float -> float = "caml_atan_float" "atan"
   [@@unboxed] [@@noalloc]
 external atan2 : float -> float -> float = "caml_atan2_float" "atan2"
   [@@unboxed] [@@noalloc]
-#end
+
 external hypot : float -> float -> float
                = "caml_hypot_float" "caml_hypot" [@@unboxed] [@@noalloc]
+#end
 
 #if BS then
 external cos : float -> float = "cos" [@@bs.val] [@@bs.scope "Math"]

@@ -3,7 +3,7 @@
  (wrapped false)
  (flags
   (:standard -w -9-50 -open Melange_compiler_libs))
- (libraries unix bs_hash_stubs melange-compiler-libs))
+ (libraries unix bs_hash_stubs melange-compiler-libs str))
 
 (rule
  (targets ext_string.ml)

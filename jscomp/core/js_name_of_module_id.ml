@@ -26,7 +26,7 @@ let (=)  (x : int) (y:float) = assert false
 *)
 
 
-let (//) = Filename.concat
+let (//) = Ext_path.concat ~force_forward_slash_on_win:()
 
 
 let fix_path_for_windows : string -> string =

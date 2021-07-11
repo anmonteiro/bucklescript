@@ -72,6 +72,30 @@ external ( +. ) : float -> float -> float = "%addfloat"
 external ( -. ) : float -> float -> float = "%subfloat"
 external ( *. ) : float -> float -> float = "%mulfloat"
 external ( /. ) : float -> float -> float = "%divfloat"
+
+#if BS then
+external ( ** ) : float -> float -> float = "pow" [@@bs.val] [@@bs.scope "Math"]
+external sqrt : float -> float =  "sqrt" [@@bs.val] [@@bs.scope "Math"]
+external exp : float -> float = "exp" [@@bs.val][@@bs.scope "Math"]
+external log : float -> float =  "log" [@@bs.val] [@@bs.scope "Math"]
+external log10 : float -> float = "log10"[@@bs.val] [@@bs.scope "Math"]
+external expm1 : float -> float = "expm1" [@@bs.val][@@bs.scope "Math"]
+external log1p : float -> float = "log1p" [@@bs.val] [@@bs.scope "Math"]
+external cos : float -> float = "cos" [@@bs.val] [@@bs.scope "Math"]
+external sin : float -> float =  "sin" [@@bs.val] [@@bs.scope "Math"]
+external tan : float -> float =  "tan" [@@bs.val] [@@bs.scope "Math"]
+external acos : float -> float =  "acos" [@@bs.val] [@@bs.scope "Math"]
+external asin : float -> float = "asin" [@@bs.val] [@@bs.scope "Math"]
+external atan : float -> float = "atan" [@@bs.val] [@@bs.scope "Math"]
+external atan2 : float -> float -> float = "atan2" [@@bs.val] [@@bs.scope "Math"]
+external hypot : float -> float -> float = "hypot" [@@bs.val] [@@bs.scope "Math"]
+external cosh : float -> float = "cosh" [@@bs.val] [@@bs.scope "Math"]
+external sinh : float -> float = "sinh" [@@bs.val] [@@bs.scope "Math"]
+external tanh : float -> float =  "tanh" [@@bs.val] [@@bs.scope "Math"]
+external ceil : float -> float =  "ceil" [@@bs.val] [@@bs.scope "Math"]
+external floor : float -> float =  "floor" [@@bs.val] [@@bs.scope "Math"]
+external abs_float : float -> float = "abs"[@@bs.val] [@@bs.scope "Math"]
+#else
 external ( ** ) : float -> float -> float = "caml_power_float" "pow"
   [@@unboxed] [@@noalloc]
 external sqrt : float -> float = "caml_sqrt_float" "sqrt"
@@ -108,6 +132,8 @@ external ceil : float -> float = "caml_ceil_float" "ceil"
 external floor : float -> float = "caml_floor_float" "floor"
   [@@unboxed] [@@noalloc]
 external abs_float : float -> float = "%absfloat"
+#end
+
 external copysign : float -> float -> float
                   = "caml_copysign_float" "caml_copysign"
                   [@@unboxed] [@@noalloc]
@@ -133,8 +159,13 @@ type nonrec fpclass = fpclass =
   | FP_zero
   | FP_infinite
   | FP_nan
+#if BS then
+let classify_float = classify_float
+#else
 external classify_float : (float [@unboxed]) -> fpclass =
   "caml_classify_float" "caml_classify_float_unboxed" [@@noalloc]
+#end
+    
 let ( ^ ) = ( ^ )
 external int_of_char : char -> int = "%identity"
 let char_of_int = char_of_int

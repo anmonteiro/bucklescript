@@ -146,7 +146,7 @@ let module_data : string array = Obj.magic (
 ;;
 
 let stdlib = "stdlib-406"
-let (//) = Filename.concat 
+let (//) x y = Ext_path.concat x y 
 let (|~) = Ext_string.contain_substring
 
 let cmi_target_file = (Filename.dirname Sys.argv.(0) // ".." // "main" // "builtin_cmi_datasets.ml")

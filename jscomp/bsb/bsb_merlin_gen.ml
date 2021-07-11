@@ -27,7 +27,7 @@ let merlin = ".merlin"
 let merlin_header = "####{BSB GENERATED: NO EDIT"
 let merlin_trailer = "####BSB GENERATED: NO EDIT}"
 let merlin_trailer_length = String.length merlin_trailer
-let (//) = Ext_path.combine
+let (//) = Ext_path.combine_for_merlin
 
 (** [new_content] should start end finish with newline *)
 let revise_merlin merlin new_content =
@@ -110,6 +110,7 @@ let package_merlin buffer ~dune_build_dir (package: Bsb_config_types.dependency)
   Ext_list.iter package.package_install_dirs (fun dir ->
     let rel =
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:Bsb_global_paths.cwd
         dir
     in
@@ -143,7 +144,10 @@ let merlin_file_gen ~per_proj_dir:(per_proj_dir:string)
     output_merlin_namespace buffer namespace;
     if ppx_config.ppxlib <> [] then begin
       Buffer.add_string buffer merlin_flg_ppx;
-      Buffer.add_string buffer (Literals.melange_eobjs_dir // Bsb_config.ppx_exe)
+      let dune_build_dir = Lazy.force Bsb_config.dune_build_dir in
+      let dir = dune_build_dir // Literals.melange_eobjs_dir // Bsb_config.ppx_exe in
+      let ppx = Format.sprintf "\"%s --as-ppx\"" dir in
+      Buffer.add_string buffer ppx
     end;
     Ext_list.iter ppx_config.ppx_files (fun ppx ->
         Buffer.add_string buffer merlin_flg_ppx;
@@ -162,19 +166,21 @@ let merlin_file_gen ~per_proj_dir:(per_proj_dir:string)
     );
     Buffer.add_string buffer
       (merlin_flg_ppx  ^
-       (match reason_react_jsx with
+       (let bsc = Bsb_global_paths.bsc_dir // Bsb_global_paths.vendor_bsc in
+        match reason_react_jsx with
         | None ->
           let fmt : _ format =
             if Ext_sys.is_windows_or_cygwin then
               "\"%s -as-ppx \""
-            else  "'%s -as-ppx '"  in Printf.sprintf fmt Bsb_global_paths.vendor_bsc
+            else  "'%s -as-ppx '"  in
+            Printf.sprintf fmt bsc
         | Some opt ->
           let fmt : _ format =
             if Ext_sys.is_windows_or_cygwin then
               "\"%s -as-ppx -bs-jsx %d\""
             else  "'%s -as-ppx -bs-jsx %d'"
           in
-          Printf.sprintf fmt  Bsb_global_paths.vendor_bsc
+          Printf.sprintf fmt bsc
             (match opt with Jsx_v3 -> 3)
        )
       );

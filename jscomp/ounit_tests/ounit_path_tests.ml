@@ -2,7 +2,7 @@ let ((>::),
      (>:::)) = OUnit.((>::),(>:::))
 
 
-let normalize = Ext_path.normalize_absolute_path
+let normalize = Ext_path.normalize_absolute_path ~force_forward_slash_on_win:()
 let (=~) x y =
   OUnit.assert_equal
   ~printer:(fun x -> x)
@@ -52,19 +52,23 @@ let suites =
       let aux a b result =
 
         Ext_path.rel_normalized_absolute_path
+          ~force_forward_slash_on_win:()
           ~from:a b =~ result ;
 
         Ext_path.rel_normalized_absolute_path
+          ~force_forward_slash_on_win:()
           ~from:(String.sub a 0 (String.length a - 1))
           b  =~ result ;
 
         Ext_path.rel_normalized_absolute_path
+          ~force_forward_slash_on_win:()
           ~from:a
           (String.sub b 0 (String.length b - 1))  =~ result
         ;
 
 
         Ext_path.rel_normalized_absolute_path
+          ~force_forward_slash_on_win:()
           ~from:(String.sub a 0 (String.length a - 1 ))
           (String.sub b 0 (String.length b - 1))
         =~ result
@@ -84,41 +88,46 @@ let suites =
       aux
         "/a/b/c/d/"
         "/a/"  "../../.."  ;
-      aux
-        "/a/b/c/d/"
-        "//"  "../../../.."  ;
+      aux "/a/b/c/d/" "//"  "../../../.."  ;
 
     end;
     (* This is still correct just not optimal depends
        on user's perspective *)
     __LOC__ >:: begin fun _ ->
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"/a/b/c/d"
         "/x/y" =~ "../../../../x/y";
 
       Ext_path.rel_normalized_absolute_path
-             ~from:"/a/b/c/d/e/./src/bindings/Navigation"
-             "/a/b/c/d/e" =~ "../../..";
+              ~force_forward_slash_on_win:()
+              ~from:"/a/b/c/d/e/./src/bindings/Navigation"
+              "/a/b/c/d/e" =~ "../../..";
 
       Ext_path.rel_normalized_absolute_path
         ~from:"/a/b/c/./d" "/a/b/c" =~ ".." ;
 
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"/a/b/c/./src" "/a/b/d/./src" =~ "../../d/src" ;
     end;
 
     (* used in module system: [es6-global] and [amdjs-global] *)
     __LOC__ >:: begin fun _ ->
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"/usr/local/lib/node_modules/"
         "//" =~ "../../../..";
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"/usr/local/lib/node_modules/"
         "/" =~ "../../../..";
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"./"
         "./node_modules/xx/./xx.js" =~ "./node_modules/xx/xx.js";
       Ext_path.rel_normalized_absolute_path
+        ~force_forward_slash_on_win:()
         ~from:"././"
         "./node_modules/xx/./xx.js" =~ "./node_modules/xx/xx.js"
     end;
